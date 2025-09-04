@@ -32,6 +32,12 @@ INSERT INTO Worker
 		(015, 'Rajesh', 'Mehta', 105000, '14-02-20 09.00.00', 'Finance'),
 		(016, 'Anjali', 'Joshi', 88000, '14-02-20 09.00.00', 'Admin');
         
+INSERT INTO Worker 
+	VALUES (017, 'Ashis', 'Kumar', 80000, '24-02-20 11.00.00','IT');
+
+INSERT INTO Worker 
+	VALUES (018, 'Asion', 'Kumar', 80000, '2024-02-20 11:00:00', 'Finance');
+    
 SELECT  * FROM Worker;
 
 SELECT SALARY FROM Worker;
@@ -101,10 +107,39 @@ SELECT DEPARTMENT, COUNT(*)
 FROM Worker 
 GROUP BY DEPARTMENT;
 
--- Show the unique/distinct values of the DEPARTMENT column from the Worker table. Even if there are multiple entries of the same department, it will show each department only once.This will actually work the same as SELECT DISTINCT DEPARTMENT FROM Worker; , because GROUP BY automatically removes duplicate values.
+-- BETTER PRACTICE
+SELECT DEPARTMENT, COUNT(DEPARTMENT) 
+FROM Worker 
+GROUP BY DEPARTMENT;
+
+-- Show the unique/distinct values of the DEPARTMENT column from the Worker table. 
+-- Even if there are multiple entries of the same department, it will show each department only once.
+-- This will actually work the same as SELECT DISTINCT DEPARTMENT FROM Worker; , because GROUP BY automatically removes duplicate values.
 SELECT DEPARTMENT 
 FROM Worker 
 GROUP BY DEPARTMENT;
+
+-- find average salary per department
+SELECT DEPARTMENT, AVG(SALARY)
+FROM Worker
+GROUP BY DEPARTMENT;
+
+-- FIND MINUMUM SALARY PER DEPARTMENT
+SELECT DEPARTMENT, MIN(SALARY)
+FROM Worker
+GROUP BY DEPARTMENT;
+
+
+-- FIND MAXIMUM SALARY PER DEPARTMENT
+SELECT DEPARTMENT, MAX(SALARY)
+FROM Worker
+GROUP BY DEPARTMENT;
+
+SELECT DEPARTMENT, COUNT(*) AS TOTAL_DEPARTMENT 
+FROM Worker
+WHERE SALARY = 80000
+GROUP BY DEPARTMENT;
+
 
 
 CREATE TABLE Bonus(
