@@ -66,6 +66,10 @@ SELECT * FROM clients;
 -- Enlist all the employees ID's, names along with the Project allocated to them.
 SELECT e.id, e.fname, e.lname, p.id, p.name from employee as e INNER JOIN project as p on e.id = p.empID;
 
+-- WITHOUT INNER JOIN
+SELECT e.id, e.fname, e.lname, p.id, p.name FROM employee AS e,  project AS p WHERE e.id = p.empID;
+
+
 -- Fetch out all the employee ID's and their contract detail who have been working
 -- from Jaipur with the clients name working in Hyderabad.
 SELECT e.id,e.fname, e.emailID, e.PhoneNo, e.city, c.id,c.first_name, c.City from employee as e INNER JOIN  clients as c on e.id =  c.empID where e.City ='Jaipur' AND c.City ='Hyderabad'; 
@@ -85,7 +89,27 @@ select e.fname, e.lname,p.id, p.name FROM employee as e CROSS JOIN project as p;
 
 
 
+-- SUBQUERY
 
+-- Where clause same table 
+-- employess with age > 30
+SELECT * from employee WHERE age IN (SELECT age FROM employee WHERE age > 30);
+
+-- WHERE clause different table
+-- emp details working in more than 1 project.
+SELECT * FROM employee WHERE id IN (SELECT empID FROM project GROUP BY empID HAVING COUNT(empID)>1);
+
+-- single valuse subquery
+-- emp details having age > avg(age)
+SELECT * FROM employee WHERE age > (SELECT AVG(age) from employee);
+
+-- FROM clause - derived tables
+-- select max age person whose first name has 'a'
+SELECT MAX(age) FROM (SELECT * FROM employee WHERE fname like '%a%') AS TEMP; 
+
+-- CORELATED SUBQUERY
+-- find 3rd oldest employee
+SELECT * FROM employee AS e1 WHERE 3 = ( SELECT COUNT(e2.age) FROM employee AS e2 WHERE e2.age >= e1.age);
 
 
 
