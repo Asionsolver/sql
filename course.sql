@@ -173,50 +173,94 @@ SELECT DISTINCT major FROM Students;
 SELECT DISTINCT course_id FROM Enrollments;
 
 -- F. GROUP BY
--- 17. (GROUP BY, COUNT) Count how many students are in each major.
+-- (GROUP BY, COUNT) 
+-- 17. Count how many students are in each major.
 SELECT major, COUNT(*) AS student_count
 FROM Students
 GROUP BY major;
 
--- 18. (GROUP BY, AVG) Calculate the average grade for each course (requires joining the Enrollments and Courses tables).
+-- (GROUP BY, AVG) 
+-- 18. Calculate the average grade for each course (requires joining the Enrollments and Courses tables).
 SELECT 
-    c.course_name, AVG(e.grade) AS average_grade
+   c.course_id, c.course_name, AVG(e.grade) AS average_grade
 FROM
     Enrollments e
         JOIN
     Courses c ON e.course_id = c.course_id
 GROUP BY e.course_id , c.course_name;
 
--- 19. GROUP BY, SUM) calculates the total transaction amount for each student (the amount in the Transactions table).
-SELECT s.first_name, s.last_name, SUM(t.amount) AS net_amount
+-- GROUP BY, SUM) 
+-- 19. Calculates the total transaction amount for each student (the amount in the Transactions table).
+SELECT t.student_id, s.first_name, s.last_name, SUM(t.amount) AS net_amount
 FROM Transactions t
 JOIN Students s ON t.student_id = s.student_id
 GROUP BY t.student_id, s.first_name, s.last_name;
+
+
 -- GROUP BY HAVING
 
--- 20. (HAVING with COUNT) Identify majors with more than 1 student.
-SELECT major, COUNT(*) AS student_count
-FROM Students
+-- (HAVING with COUNT) 
+-- 20. Identify majors with more than 1 student.
+SELECT 
+    major, COUNT(*) AS student_count
+FROM
+    Students
 GROUP BY major
 HAVING COUNT(*) > 1;
 
 -- 21. (HAVING with AVG) Identify courses with an average grade higher than 88.0.
-SELECT c.course_name, AVG(e.grade) AS average_grade
-FROM Enrollments e
-JOIN Courses c ON e.course_id = c.course_id
-GROUP BY e.course_id, c.course_name
+SELECT 
+    c.course_name, AVG(e.grade) AS average_grade
+FROM
+    Enrollments e
+        JOIN
+    Courses c ON e.course_id = c.course_id
+GROUP BY e.course_id , c.course_name
 HAVING AVG(e.grade) > 88.0;
 
 -- 22. (HAVING with SUM) Identify students whose total scholarship (transaction_type = 'Scholarship') exceeds 1500 yuan.
-SELECT s.student_id, s.first_name, s.last_name, SUM(t.amount) AS total_scholarship
-FROM Transactions t
-JOIN Students s ON t.student_id = s.student_id
-WHERE t.transaction_type = 'Scholarship'
-GROUP BY t.student_id, s.student_id, s.first_name, s.last_name
+SELECT 
+    s.student_id,
+    s.first_name,
+    s.last_name,
+    SUM(t.amount) AS total_scholarship
+FROM
+    Transactions t
+        JOIN
+    Students s ON t.student_id = s.student_id
+WHERE
+    t.transaction_type = 'Scholarship'
+GROUP BY t.student_id , s.student_id , s.first_name , s.last_name
 HAVING SUM(t.amount) > 1500;
 
--- 
+-- 23. A student who has a grade above 90 in any course
+SELECT DISTINCT s.student_id, s.first_name, s.last_name, s.major
+FROM Students s
+JOIN Enrollments e ON s.student_id = e.student_id
+WHERE e.grade > 90;
 
--- 
+-- 24. Average grade of students per major (if grades exist)
+SELECT s.major, 
+       AVG(e.grade) AS average_grade,
+       COUNT(DISTINCT s.student_id) AS total_students,
+       COUNT(e.grade) AS students_with_grades
+FROM Students s
+LEFT JOIN Enrollments e ON s.student_id = e.student_id
+GROUP BY s.major;
 
--- 
+
+-- 25. Students who are enrolled in all Computer Science courses
+SELECT s.student_id, s.first_name, s.last_name
+FROM Students s
+WHERE s.major = 'Computer Science'
+AND NOT EXISTS (
+    SELECT c.course_id 
+    FROM Courses c
+    WHERE c.department = 'Computer Science'
+    AND NOT EXISTS (
+        SELECT e.enrollment_id
+        FROM Enrollments e
+        WHERE e.student_id = s.student_id 
+        AND e.course_id = c.course_id
+    )
+);
