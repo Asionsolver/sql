@@ -36,6 +36,7 @@ SELECT * FROM Dep2;
 -- SET OPERATIONS
 
 -- List out all the employee in the company
+
 SELECT * FROM Dep1 
 UNION
 SELECT * FROM Dep2;
@@ -46,10 +47,17 @@ UNION
 SELECT * FROM Dep2 WHERE role = 'salesman';
 
 -- List out all the employees who work for both the department.
-SELECT Dep1.* FROM Dep1 INNER JOIN Dep2 using(empid);
+-- INTERSECT
+SELECT 
+    Dep1.*
+FROM
+    Dep1
+        INNER JOIN
+    Dep2 USING (empid);
 
 
 -- List out all the employees working in dep1 but no in dep2
+-- MINUS
 SELECT Dep1.* FROM Dep1 LEFT JOIN Dep2 USING(empid)
 WHERE Dep2.empid IS NULL;
 

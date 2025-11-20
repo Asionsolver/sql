@@ -4,11 +4,13 @@ USE EnterpriseHub;
 -- project
 CREATE TABLE project (
     id INT PRIMARY KEY,
-    FOREIGN KEY (empId)
+    empId INT,
+    startdate DATE,
+     FOREIGN KEY (empId)
 		REFERENCES employee(id)
         ON DELETE CASCADE,
     name VARCHAR(50),
-    startdate DATE,
+    clientId INT,
      FOREIGN KEY (clientId)
 		REFERENCES clients(id)
         ON DELETE CASCADE
@@ -71,27 +73,68 @@ SELECT * FROM clients;
 
 -- INNER JOIN
 -- Enlist all the employees ID's, names along with the Project allocated to them.
-SELECT e.id, e.fname, e.lname, p.id, p.name from employee as e INNER JOIN project as p on e.id = p.empID;
+SELECT 
+    e.id, e.fname, e.lname, p.id, p.name
+FROM
+    employee AS e
+        INNER JOIN
+    project AS p ON e.id = p.empID;
 
 -- WITHOUT INNER JOIN
-SELECT e.id, e.fname, e.lname, p.id, p.name FROM employee AS e,  project AS p WHERE e.id = p.empID;
+SELECT 
+    e.id, e.fname, e.lname, p.id, p.name
+FROM
+    employee AS e,
+    project AS p
+WHERE
+    e.id = p.empID;
 
 
 -- Fetch out all the employee ID's and their contract detail who have been working
 -- from Jaipur with the clients name working in Hyderabad.
-SELECT e.id,e.fname, e.emailID, e.PhoneNo, e.city, c.id,c.first_name, c.City from employee as e INNER JOIN  clients as c on e.id =  c.empID where e.City ='Jaipur' AND c.City ='Hyderabad'; 
+SELECT 
+    e.id,
+    e.fname,
+    e.emailID,
+    e.PhoneNo,
+    e.city,
+    c.id,
+    c.first_name,
+    c.City
+FROM
+    employee AS e
+        INNER JOIN
+    clients AS c ON e.id = c.empID
+WHERE
+    e.City = 'Jaipur'
+        AND c.City = 'Hyderabad'; 
 
 -- LEFT JOIN
 -- Fetch out each project allocated to each employee.alter
-SELECT * from employee as e LEFT JOIN project as p ON e.id = p.empID;
+SELECT 
+    *
+FROM
+    employee AS e
+        LEFT JOIN
+    project AS p ON e.id = p.empID;
 
 -- RIGHT JOIN
 -- lIST out all the projects along with the employee's name and their respective allocated email ID.
-SELECT p.id, p.name, e.fname, e.lname, e.emailID FROM employee as e RIGHT JOIN project as p on e.id = p.empID;
+SELECT 
+    p.id, p.name, e.fname, e.lname, e.emailID
+FROM
+    employee AS e
+        RIGHT JOIN
+    project AS p ON e.id = p.empID;
 
 -- CROSS JOIN
--- List out all the combinations possible forthe employee's nsame and projects that cna exist.
-select e.fname, e.lname,p.id, p.name FROM employee as e CROSS JOIN project as p;
+-- List out all the combinations possible forthe employee's name and projects that cna exist.
+SELECT 
+    e.fname, e.lname, p.id, p.name
+FROM
+    employee AS e
+        CROSS JOIN
+    project AS p;
 
 
 
@@ -100,28 +143,78 @@ select e.fname, e.lname,p.id, p.name FROM employee as e CROSS JOIN project as p;
 
 -- Where clause same table 
 -- employess with age > 30
-SELECT * from employee WHERE age IN (SELECT age FROM employee WHERE age > 30);
+SELECT 
+    *
+FROM
+    employee
+WHERE
+    age IN (SELECT 
+            age
+        FROM
+            employee
+        WHERE
+            age > 30);
 
 -- WHERE clause different table
 -- emp details working in more than 1 project.
-SELECT * FROM employee WHERE id IN (SELECT empID FROM project GROUP BY empID HAVING COUNT(empID)>1);
+SELECT 
+    *
+FROM
+    employee
+WHERE
+    id IN (SELECT 
+            empID
+        FROM
+            project
+        GROUP BY empID
+        HAVING COUNT(empID) > 1);
 
 -- single valuse subquery
 -- emp details having age > avg(age)
-SELECT * FROM employee WHERE age > (SELECT AVG(age) from employee);
+SELECT 
+    *
+FROM
+    employee
+WHERE
+    age > (SELECT 
+            AVG(age)
+        FROM
+            employee);
 
 -- FROM clause - derived tables
--- select max age person whose first name has 'a'
-SELECT MAX(age) FROM (SELECT * FROM employee WHERE fname like '%a%') AS TEMP; 
+-- select max age person whose first name has contain 'a'
+SELECT 
+    MAX(age)
+FROM
+    (SELECT 
+        *
+    FROM
+        employee
+    WHERE
+        fname LIKE '%a%') AS TEMP; 
 
 -- CORELATED SUBQUERY
 -- find 3rd oldest employee
-SELECT * FROM employee AS e1 WHERE 3 = ( SELECT COUNT(e2.age) FROM employee AS e2 WHERE e2.age >= e1.age);
+SELECT 
+    *
+FROM
+    employee AS e1
+WHERE
+    3 = (SELECT 
+            COUNT(e2.age)
+        FROM
+            employee AS e2
+        WHERE
+            e2.age >= e1.age);
 
 
 -- VIEW
 -- CREATE VIEW
-CREATE VIEW Custom_View AS SELECT fname, age FROM employee;
+CREATE VIEW Custom_View AS
+    SELECT 
+        fname, age
+    FROM
+        employee;
 
 -- VIEWING FROM VIEW
 SELECT * FROM Custom_View;
