@@ -2,7 +2,7 @@
 SHOW DATABASES;
 
 /*create new database*/
-CREATE DATABASE temp;
+CREATE DATABASE IF NOT EXISTS temp;
 
 USE temp;
 
