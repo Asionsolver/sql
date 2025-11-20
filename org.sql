@@ -64,7 +64,7 @@ CREATE TABLE Title(
         ON DELETE CASCADE
 );    
         
-INSERT INTO Title 
+ INSERT INTO Title 
 	(WORKER_REF_ID, WORKER_TITLE, AFFECTED_FROM) VALUES
 		(001, 'Manager', '2016-02-20 00:00:00'),
 		(002, 'Executive', '2016-06-11 00:00:00'),
@@ -104,6 +104,10 @@ VALUES (1251,'Ram Kumar','Dilbagh Nagar','M','Jalandhar', 144002),
 INSERT INTO Customer
 VALUES (1252,'Swan Kumar','Dilbagh Nagar','M','Jalandhar', NULL);
 
+
+INSERT INTO Customer
+VALUES (1253,'Pawn Kumar','Dilbagh Nagar','M','Jalandhar', 123542),
+       (1254,'Pawn Sing','Dilbagh Nagar','M','Jalandhar', 123542);
 select * from Customer;
 
 --  CREATE TABLE Order_details (
@@ -141,12 +145,25 @@ select * from Order_details;
 -- Cannot delete or update a parent row: a foreign key constraint fails (`ORG`.`Order_details`, CONSTRAINT `Order_details_ibfk_1` FOREIGN KEY (`Cust_id`) REFERENCES `Customer` (`id`))
 delete from Customer where id = 500;        
         
+-- Replace --> Data already present, then replace. But data not present then insert new        
+
+replace into Customer
+values(21,'Pritom','Ashok Nagar','M','Jalandhar', 150002 );
+
+replace into Customer set id=13, cname='Prithijit', address='Pabna', gender='M', city='Rajshahi', pincode=145241;
+        
+
+-- inner join        
         
         
-        
-        
-        
-        
+
+
+
+
+
+
+
+
         
         
         
@@ -278,7 +295,7 @@ insert into account_details
 values(3, 'Asion', 2000,0.5),
 	  (4, 'Tripti', 2000,0.5);
                 
--- update
+-- update --> if row is not present, Replace will add a new row while update will do nothing
 update account_details set balance=3000 where id = 3;       
         
 update account_details set balance=4000, saving_interest=0.8 where id = 4;          

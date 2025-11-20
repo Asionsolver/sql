@@ -1,13 +1,17 @@
 CREATE DATABASE EnterpriseHub;
 USE EnterpriseHub;
 
--- employees
+-- project
 CREATE TABLE project (
     id INT PRIMARY KEY,
-    empID INT,
+    FOREIGN KEY (empId)
+		REFERENCES employee(id)
+        ON DELETE CASCADE,
     name VARCHAR(50),
     startdate DATE,
-    clientID INT
+     FOREIGN KEY (clientId)
+		REFERENCES clients(id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO project (id, empID, name, startdate, clientID) VALUES
@@ -48,7 +52,10 @@ CREATE TABLE clients (
     emailID VARCHAR(100),
     PhoneNo VARCHAR(20),
     City VARCHAR(50),
-    empID INT
+    empId INT,
+     FOREIGN KEY (empId)
+		REFERENCES employee(id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO clients (id, first_name, last_name, age, emailID, PhoneNo, City, empID) VALUES
