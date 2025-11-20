@@ -104,15 +104,53 @@ VALUES (1251,'Ram Kumar','Dilbagh Nagar','M','Jalandhar', 144002),
 INSERT INTO Customer
 VALUES (1252,'Swan Kumar','Dilbagh Nagar','M','Jalandhar', NULL);
 
+select * from Customer;
+
+-- create table account(
+-- id int primary key,
+-- name varchar(255) unique,
+-- balance int,
+-- constraint acc_balance_check check(balance>1000)
+-- );
 
 create table account(
 id int primary key,
 name varchar(255) unique,
-balance int,
-constraint acc_balance_check check(balance>1000)
+balance int not null default 0
 );
+insert into account(id,name)
+values(1, 'Ashis');
 
-select * from Customer;
+-- less than 1000 so can not insert this balance and name must be unique
+insert into account
+values(2, 'Asis', 2000);
+
+-- add new column
+alter table account add interest float not null default 0;
+alter table account add abc int not null default 0;
+
+-- modify column data type
+alter table account modify interest double not null default 0;
+
+-- rename column
+alter table account change interest saving_interest float not null default 0;
+
+-- drop column 
+alter table account drop abc;
+
+-- rename table name
+alter table account rename to account_details;
+
+-- previous name
+-- select * from account;
+
+-- new name
+select * from account_details;
+
+describe account
+desc account;
+
+drop table account;
     
 select 44+11;
 
@@ -178,7 +216,7 @@ select department, sum(Salary) from Worker group by department;
 -- group by <--> having
 select department, count(Department) from Worker group by department having count(Department) > 4; 
         
-       
+-- DML--> Data Modification Language
         
         
         
