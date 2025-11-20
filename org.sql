@@ -106,6 +106,51 @@ VALUES (1252,'Swan Kumar','Dilbagh Nagar','M','Jalandhar', NULL);
 
 select * from Customer;
 
+--  CREATE TABLE Order_details (
+-- Order_id integer PRIMARY KEY,
+-- Delevery_date date,
+-- Cust_id int,
+-- foreign key(Cust_id) references Customer(id)
+-- );  
+
+--  CREATE TABLE Order_details (
+-- Order_id integer PRIMARY KEY,
+-- Delevery_date date,
+-- Cust_id int,
+-- foreign key(Cust_id) references Customer(id) on delete cascade
+-- );   
+
+ CREATE TABLE Order_details (
+Order_id integer PRIMARY KEY,
+Delevery_date date,
+Cust_id int,
+foreign key(Cust_id) references Customer(id) on delete set null
+);       
+        
+insert into Order_details
+values (1,'2019-03-11',500),
+	   (2,'2019-03-12',500),
+       (3,'2019-03-13',245),
+       (4,'2019-03-11',210),
+       (5,'2012-03-11',1300);        
+        
+        
+select * from Order_details;
+        
+-- integrity constrains
+-- Cannot delete or update a parent row: a foreign key constraint fails (`ORG`.`Order_details`, CONSTRAINT `Order_details_ibfk_1` FOREIGN KEY (`Cust_id`) REFERENCES `Customer` (`id`))
+delete from Customer where id = 500;        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 -- create table account(
 -- id int primary key,
 -- name varchar(255) unique,
@@ -113,44 +158,7 @@ select * from Customer;
 -- constraint acc_balance_check check(balance>1000)
 -- );
 
-create table account(
-id int primary key,
-name varchar(255) unique,
-balance int not null default 0
-);
-insert into account(id,name)
-values(1, 'Ashis');
 
--- less than 1000 so can not insert this balance and name must be unique
-insert into account
-values(2, 'Asis', 2000);
-
--- add new column
-alter table account add interest float not null default 0;
-alter table account add abc int not null default 0;
-
--- modify column data type
-alter table account modify interest double not null default 0;
-
--- rename column
-alter table account change interest saving_interest float not null default 0;
-
--- drop column 
-alter table account drop abc;
-
--- rename table name
-alter table account rename to account_details;
-
--- previous name
--- select * from account;
-
--- new name
-select * from account_details;
-
-describe account
-desc account;
-
-drop table account;
     
 select 44+11;
 
@@ -216,44 +224,76 @@ select department, sum(Salary) from Worker group by department;
 -- group by <--> having
 select department, count(Department) from Worker group by department having count(Department) > 4; 
         
--- DML--> Data Modification Language
+
+        
+create table account(
+id int primary key,
+name varchar(255) unique,
+balance int not null default 0
+);
+insert into account(id,name)
+values(1, 'Ashis');
+
+-- less than 1000 so can not insert this balance and name must be unique
+insert into account
+values(2, 'Asis', 2000);
+
+-- add new column
+alter table account add interest float not null default 0;
+alter table account add abc int not null default 0;
+
+-- modify column data type
+alter table account modify interest double not null default 0;
+
+-- rename column
+alter table account change interest saving_interest float not null default 0;
+
+-- drop column 
+alter table account drop abc;
+
+-- rename table name
+alter table account rename to account_details;
+
+-- previous name
+-- select * from account;
+
+-- new name
+select * from account_details;
+
+-- describe account
+
+desc account;
+
+drop table account;
         
         
+-- DML--> Data Modification Language    
+
+insert into account_details(id,name)
+values(5, 'Avisek'),
+      (6, 'Niloy'),
+      (7, 'Pritom');
+      
+insert into account_details
+values(3, 'Asion', 2000,0.5),
+	  (4, 'Tripti', 2000,0.5);
+                
+-- update
+update account_details set balance=3000 where id = 3;       
         
+update account_details set balance=4000, saving_interest=0.8 where id = 4;          
         
+-- update multiple row
+set SQL_SAFE_UPDATE=1;  
+      
+update account_details set saving_interest=0.9;        
+      
+update account_details set balance= balance + 100;        
         
+-- delete
+delete from account_details where id =1;        
         
+-- delete table
+delete from account_details;
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+select * from account_details;        
