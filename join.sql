@@ -112,11 +112,18 @@ SELECT MAX(age) FROM (SELECT * FROM employee WHERE fname like '%a%') AS TEMP;
 SELECT * FROM employee AS e1 WHERE 3 = ( SELECT COUNT(e2.age) FROM employee AS e2 WHERE e2.age >= e1.age);
 
 
+-- VIEW
+-- CREATE VIEW
+CREATE VIEW Custom_View AS SELECT fname, age FROM employee;
 
+-- VIEWING FROM VIEW
+SELECT * FROM Custom_View;
 
+-- ALTERING THE VIEW
+ALTER VIEW Custom_View AS SELECT fname, lname,age FROM employee;
 
-
-
+-- DROPING THE VIEW
+DROP VIEW IF EXISTS Custom_View;
 
 
 
