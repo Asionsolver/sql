@@ -33,6 +33,8 @@ INSERT INTO Worker
 		(016, 'Anjali', 'Joshi', 88000, '14-02-20 09.00.00', 'Admin');
         
 SELECT  * FROM Worker;
+
+SELECT FIRST_NAME, SALARY FROM Worker;
         
 CREATE TABLE Bonus(
 	WORKER_REF_ID INT,
@@ -82,39 +84,101 @@ INSERT INTO Title
 		(016, 'Admin Executive', '2014-02-20 00:00:00');
 				
 SELECT  * FROM Title;        
+
+CREATE TABLE Customer (
+id integer PRIMARY KEY,
+cname varchar(225),
+Address varchar(225),
+Gender char(2),
+City varchar(225),
+Pincode integer
+);
+
+INSERT INTO Customer
+VALUES (1251,'Ram Kumar','Dilbagh Nagar','M','Jalandhar', 144002),
+(1300,'Shayam Singh','Ludhiana H.O','M','Ludhiana', 141001),
+(245,'Neelabh Shukla','Ashok Nagar','M','Jalandhar', 144003),
+(210,'Barkha Singh','Dilbagh Nagar','F','Jalandhar', 144002),
+(500,'Rohan Arora','Ludhiana H.O','M','Ludhiana', 141001);
+     
+INSERT INTO Customer
+VALUES (1252,'Swan Kumar','Dilbagh Nagar','M','Jalandhar', NULL);
+
+
+create table account(
+id int primary key,
+name varchar(255) unique,
+balance int,
+constraint acc_balance_check check(balance>1000)
+);
+
+select * from Customer;
+    
+select 44+11;
+
+select now();
+
+select lcase('Ashis');
+
+select * from Worker where SALARY > 80000;        
+	
+select * from Worker where DEPARTMENT = "HR";
+
+-- salary [80000,300000]
+select * from Worker where SALARY between 80000 AND 300000;
+
+-- reduce OR statement
+-- HR, ADMIN, Finance
+select * from Worker where DEPARTMENT = 'HR' or DEPARTMENT = 'Admin' or DEPARTMENT = 'Finance';
+
+-- better way: insert
+select * from Worker where DEPARTMENT in ('HR', 'Admin', 'finance');
+        
+select * from Worker where DEPARTMENT not in ('HR', 'Admin', 'finance');    
         
         
+select * from Customer where Pincode is NULL;        
         
+-- pattern match
+select * from Worker where first_name like '%i%'; 
+select * from Worker where first_name like '_i%';     
+select * from Worker where first_name like '__i%';     
         
+-- sorting using order by
+-- by default asc
+select * from Worker order by salary; 
+
+select * from Worker order by salary desc;       
         
+-- Distinct Values
+select distinct department from Worker;    
+
+-- Data Grouping  
+
+-- Find no. of employee working in different department.
+-- group by
+select department from Worker group by department;   
+
+select department, count(*) from Worker group by department;         
+	
+select department, count(Department) from Worker group by department;
+
+-- Avg salary per department
+select department, avg(Salary) from Worker group by department;
+
+-- min        
+select department, min(Salary) from Worker group by department;        
+
+-- max
+select department, max(Salary) from Worker group by department;       
+   
+-- sum
+select department, sum(Salary) from Worker group by department;     
+ 
+-- group by <--> having
+select department, count(Department) from Worker group by department having count(Department) > 4; 
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+       
         
         
         
