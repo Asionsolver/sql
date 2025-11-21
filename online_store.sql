@@ -68,6 +68,16 @@ INSERT INTO orders (customer_id, order_date, total_amount, status) VALUES
 (1, '2023-05-04', 12999.00, 'Shipped'),
 (4, '2023-05-05', 2999.00, 'Delivered');
 
+INSERT INTO orders (customer_id, order_date, total_amount, status) VALUES
+(2, '2023-03-05', 299.00, 'Shipped'),
+(3, '2023-02-05', 299.00, 'Processing'),
+(4, '2023-01-05', 299.00, 'Processing'),
+(3, '2023-03-05', 299.00, 'Shipped'),
+(2, '2023-04-05', 299.00, 'Delivered'),
+(4, '2023-04-05', 299.00, 'Delivered'),
+(1, '2023-03-05', 299.00, 'Processing'),
+(1, '2023-02-05', 289.00, 'Delivered');
+
 -- Insert order details data
 INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES
 (1, 1, 1, 79999.00),
@@ -92,7 +102,7 @@ select * from customers where city = 'Delhi';
 select * from products where price > 50000;
 
 -- Find all customers who registered after March 2023.
-
+select * from customers where registration_date > '2023-03-31';
 
 -- ************************************************************************************Advanced WHERE Condition Exercises************************************************************************************
 -- Find products priced between 10,000 and 50,000 with an inventory of more than 25.
@@ -112,25 +122,36 @@ select * from customers where registration_date >= '2023-01-01' and registration
 
 -- ************************************************************************************BETWEEN Practice************************************************************************************
 -- Find products with a price between 5,000 and 20,000 (inclusive).
+select * from products where price between 5000 and 20000;
 
 -- Find orders placed between February 2023 and April 2023 (inclusive).
+select * from orders where order_date between  '2023-02-01' and '2023-03-31';
+
 
 -- ************************************************************************************Complex BETWEEN Practice************************************************************************************
 -- Find orders with a total amount between 10,000 and 100,000and status equal to 'Delivered'.
+select * from orders where total_amount between  10000 and 100000 and status = 'Delivered';
 
 -- Find customers from Delhi who registered between January and March 2023.
+select * from customers where registration_date between  '2023-01-01' and '2023-03-31';
+
 
 -- ************************************************************************************IN Practice************************************************************************************
 -- Find customers from Delhi or Mumbai.
+select * from customers where city = 'Delhi' or city = 'Mumbai';
 
 -- Find products in the 'Electronics' or 'Footwear' categories.
+select * from products where category = 'Electronics' or category = 'Footwear';
 
 -- ************************************************************************************AND / OR / NOT Practice************************************************************************************
 -- Find customers who live in Delhi AND whose name starts with 'R'.
+select * from customers where city = 'Delhi' and first_name like 'R%';
 
 -- Find products with price > 10,000 AND stock/inventory < 50.
+select * from products where price > 10000 and stock_quantity < 50;
 
 -- Find orders with status 'Processing' OR 'Shipped'.
+select * from orders where status = 'Processing' or status = 'Shipped';
 
 -- ************************************************************************************Advanced AND/OR/NOT Combinations************************************************************************************
 
@@ -167,39 +188,92 @@ select * from products where product_name like 'i%' or product_name like '%s';
 -- Find customers whose email contains 'gmail' or 'yahoo' but does not contain 'patel'.
 select * from customers where (email like '%gmail%' or email like '%yahoo%') and  email not like '%patel%' ;
 
-
--- Find products whose name is exactly 10 characters long.
-
+-- Find products whose name is exactly 11 characters long.
+SELECT * FROM products WHERE LENGTH(product_name) = 11;
 
 -- ************************************************************************************ORDER BY Practice************************************************************************************
 
 -- List products in descending order of price.
+SELECT * FROM products ORDER BY price DESC;
+
 -- List customers in ascending order of registration date.
+SELECT * FROM customers ORDER BY registration_date ASC;
+
 -- List orders in descending order of total amount.
+SELECT * FROM orders ORDER BY total_amount DESC;
+
 
 -- ************************************************************************************DISTINCT Practice************************************************************************************
 
 -- Find all unique city names.
+SELECT DISTINCT city FROM customers;
+
 -- Find all unique order statuses.
+SELECT DISTINCT status FROM orders;
+
 -- Find all unique product categories.
+SELECT DISTINCT category FROM products;
 
 -- ************************************************************************************GROUP BY Practice************************************************************************************
 
 -- Count the number of customers per city.
+SELECT city, COUNT(*) as customer_count 
+FROM customers 
+GROUP BY city;
+
 -- Calculate the average price of products per category.
+SELECT category, AVG(price) as avg_price 
+FROM products 
+GROUP BY category;
+
 -- Count the total number of orders for each customer (grouped by customer ID).
+SELECT customer_id, COUNT(*) as order_count 
+FROM orders 
+GROUP BY customer_id;
 
 -- ************************************************************************************GROUP BY with HAVING Practice************************************************************************************
 
 -- Find customers who have placed more than 1 order.
+SELECT customer_id, COUNT(*) as order_count 
+FROM orders 
+GROUP BY customer_id 
+HAVING COUNT(*) > 1;
+
 -- Find product categories where the average price is greater than 50,000.
+SELECT category, AVG(price) as avg_price 
+FROM products 
+GROUP BY category 
+HAVING AVG(price) > 50000;
+
 -- Find customers whose total sales/spending exceed 100,000.
+SELECT customer_id, SUM(total_amount) as total_spent 
+FROM orders 
+GROUP BY customer_id 
+HAVING SUM(total_amount) > 100000;
 
 -- ************************************************************************************Comprehensive / Mixed Practice************************************************************************************
 
 -- Find customers who live in Delhi, have placed more than 1 order, AND have total spending greater than 50,000.
+SELECT c.customer_id, c.first_name, c.last_name, 
+       COUNT(o.order_id) as order_count, 
+       SUM(o.total_amount) as total_spent
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+WHERE c.city = 'Delhi'
+GROUP BY c.customer_id, c.first_name, c.last_name
+HAVING COUNT(o.order_id) > 1 AND SUM(o.total_amount) > 50000;
+
 -- Find products in the 'Electronics' category with inventory less than 100, sorted by price in descending order.
+SELECT * FROM products 
+WHERE stock_quantity < 100 AND category = 'Electronics'
+ORDER BY price DESC;
+
 -- Calculate the number of customers registered in 2023 for each city.
+SELECT city, COUNT(*) as customer_count 
+FROM customers 
+WHERE YEAR(registration_date) = 2023
+GROUP BY city;
+
 
 -- ************************************************************************************JOIN with Other Keywords – Comprehensive Practice************************************************************************************
 -- Find all customers who have purchased products from the 'Electronics' category.
